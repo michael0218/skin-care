@@ -1,12 +1,8 @@
 #%%
 import torch
 import torch.nn as nn
-import torch.optim as optim
 import torchvision.transforms as transforms
-import argparse
-from skin_dataset_loader import SkinLesion
 import numpy as np
-import pandas as pd
 import torchvision.models as models
 from PIL import Image
 
