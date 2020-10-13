@@ -16,34 +16,30 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 n_class = 3
 pre_epoch = 0
-BATCH_SIZE = 8 
-
+BATCH_SIZE = 36
 
 
 
 transform_test = transforms.Compose([
-        transforms.Resize((224,224)),
-
-        # transforms.Resize((250,250)),
-        # transforms.CenterCrop((224,224)),
+        transforms.Resize((280,280)),
+        transforms.CenterCrop((224,224)),
         transforms.ToTensor(),
         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
     ])
 
 
-num2num_label_converting = {1:1,2:2,3:3,4:4,5:5,6:6,8:0,17:7}
 Num2Cata = {0:"nevus",1:"melanoma",2:"seborrheic_keratosis"}
 Cata2Num = {"nevus":0,"melanoma":1,"seborrheic_keratosis":2}
 classes = ['nevus','melanoma','seborrheic_keratosis']
 df = pd.read_csv('/mnt/data-home/mike/dataset/skin-lesions/df_phase.csv')
 df_valid = df[df.phase == 'test'].reset_index(drop=True)
 valid_set = SkinLesion(df_valid, transforms=transform_test)
-testloader = torch.utils.data.DataLoader(valid_set, batch_size=10, shuffle=False, num_workers=2)
+testloader = torch.utils.data.DataLoader(valid_set, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
 resnet101 = models.resnet101(pretrained=False)
 resnet101.fc = nn.Linear(2048, n_class)
 net = resnet101.to(device)
-PATH = '/mnt/data-home/mike/modelweight/skin/skin_resnet101_centercrop_normalization_pretrained_focalloss/net_021.pth'
+PATH = '/mnt/data-home/mike/modelweight/skin/skin_resnet101_centercrop_normalization_pretrained_focalloss/net_084.pth'
 net.load_state_dict(torch.load(PATH))
 
 
