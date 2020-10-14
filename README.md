@@ -3,7 +3,7 @@ The skin-lesions detection
 
 
 ## Features
-1. Pretrained resnet model 101
+1. Pretrained Resnet Model 101
 2. Focal loss
 
 ## Requirements
@@ -19,11 +19,13 @@ tqdm>=4.36.1
 scikit-image>=0.16.2
 matplotlib==3.1.0
 
-## Usage:
-Download the open dataset from kaggle.
+## Download Open Dataset
 
+Download the open dataset from kaggle, with following link:
 https://www.kaggle.com/wanderdust/skin-lesion-analysis-toward-melanoma-detection 
 
+
+## Usage:
 1. Unzip the dataset and put it with preprocessing.py
 
 `$ python preprocessing.py --data ./skin-lesions`
