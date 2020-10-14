@@ -12,8 +12,10 @@ from torch.utils.tensorboard import SummaryWriter
 import torchvision.models as models
 from focalLoss import FocalLoss
 
-defaultDir = 'skin_resnet101_centercrop_normalization_pretrained_focalloss'
-outputroot = '/mnt/data-home/mike/modelweight/skin'
+parser = argparse.ArgumentParser(description='Skin-lesions Training')
+parser.add_argument('--out', default='./result/', help='folder to output images and model checkpoints') 
+args = parser.parse_args()
+
 num_workers = 8
 n_class = 3
 
@@ -27,23 +29,18 @@ print(net)
 
 #%%
 # Hyperparameter
-EPOCH = 1000
+EPOCH = 200
 pre_epoch = 0  
 BATCH_SIZE = 36
 LR = 0.001   # learning rate 
 
 
-df = pd.read_csv('/mnt/data-home/mike/dataset/skin-lesions/df_phase.csv')
+df = pd.read_csv('./data.csv')
 df_train = df[df.phase == 'train'].reset_index(drop=True)
 df_valid = df[df.phase == 'valid'].reset_index(drop=True)
 
 
-
-parser = argparse.ArgumentParser(description='PyTorch Training')
-parser.add_argument('--outf', default=os.path.join(outputroot,defaultDir), help='folder to output images and model checkpoints') 
-args = parser.parse_args()
-
-writer = SummaryWriter(os.path.join(outputroot,defaultDir,'tensorboard'))
+writer = SummaryWriter(os.path.join(args.out,'tensorboard'))
 
 
 
@@ -74,14 +71,9 @@ testloader = torch.utils.data.DataLoader(valid_set, batch_size=BATCH_SIZE, shuff
 
 
 
-
 criterion = FocalLoss(n_class) 
 optimizer = optim.Adam(net.parameters(), lr=LR)
 graph_create_flag = 0
-
-
-
-
 
 
 
@@ -107,13 +99,6 @@ if __name__ == "__main__":
             optimizer.zero_grad()
 
             outputs = net(inputs)
-            if i == 0:  #show image every epoch
-                grid = utils.make_grid(inputs)
-                writer.add_image('dataset',grid,i)
-                if graph_create_flag == 0:
-                    print('write graph')
-                    writer.add_graph(net, inputs)
-                    graph_create_flag = 1
 
             loss = criterion(outputs, labels)
             
@@ -150,7 +135,6 @@ if __name__ == "__main__":
             print('Train accuracy: %.3f%%' % (100 * (correctT/ totalT)))
             accT = 100. * correctT / totalT
 
-
             correct = 0
             total = 0
             sum_loss = 0
@@ -168,19 +152,6 @@ if __name__ == "__main__":
                 correct += (predicted == labels).sum().item()
             print('valid accuracy: %.3f%%' % (100 * (correct/ total)))
             acc = 100. * correct / total
-
-
-
-
-            writer.add_scalar('Loss/train',sum_lossT / totalT,epoch)
-            writer.add_scalar('Loss/valid', sum_loss / total, epoch)
-            writer.add_scalars('Loss',{'train': sum_lossT / totalT},epoch)
-            writer.add_scalars('Loss',{'valid': sum_loss / total}, epoch)
-
-            writer.add_scalar('Accuracy/train',correctT / totalT,epoch)
-            writer.add_scalar('Accuracy/valid', correct / total, epoch)
-            writer.add_scalars('Accuracy',{'train': correctT / totalT},epoch)
-            writer.add_scalars('Accuracy',{'valid': correct / total}, epoch)
 
 
             if acc > best_acc:

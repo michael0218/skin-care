@@ -2,10 +2,14 @@
 
 import os
 import pandas as pd
-dataRoot = '/mnt/data-home/mike/dataset/skin-lesions'
+import argparse
+
+parser = argparse.ArgumentParser(description='Skin-lesions Training')
+parser.add_argument('--data', default='./skin-lesions/', help='folder to images')
+args = parser.parse_args()
 
 fileList = []
-for pathName, dirName, fileNames in os.walk(dataRoot):
+for pathName, dirName, fileNames in os.walk(args.data):
     for fileName in fileNames:
         if fileName.endswith('.jpg'):
             pathImg = os.path.join(pathName, fileName)
@@ -15,6 +19,4 @@ for pathName, dirName, fileNames in os.walk(dataRoot):
             fileList.append([fileName, pathImg, category, phase])
 
 df = pd.DataFrame(fileList, columns=["fileName", "pathImg", 'category', "phase"])
-#/mnt/data-home/mike/dataset/skin-lesions/valid/seborrheic_keratosis/ISIC_0014568.jpg
-# %%
-df.to_csv(os.path.join(dataRoot,'df_phase.csv'))
+df.to_csv('./data.csv')
