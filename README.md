@@ -1,6 +1,11 @@
 # skin-lesions
 The skin-lesions detection
 
+
+## Features
+1. Pretrained resnet model 101
+2. Focal loss
+
 ## Usage:
 Download the open dataset from kaggle.
 
