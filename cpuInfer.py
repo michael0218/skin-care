@@ -11,7 +11,7 @@ parser.add_argument('--input', default='./test.jpg', help='path to image')
 parser.add_argument('--weight', default='./weights.pth', help='path to image')
 args = parser.parse_args()
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cpu")
 img = Image.open(args.input)
 
 transform_test = transforms.Compose([
@@ -27,7 +27,7 @@ resnet101 = models.resnet101(pretrained=False)
 resnet101.fc = nn.Linear(2048, 3)
 net = resnet101.to(device)
 
-net.load_state_dict(torch.load(args.weight))
+net.load_state_dict(torch.load(args.weight,map_location='cpu'))
 
 with torch.no_grad():
     net.eval()
@@ -36,6 +36,6 @@ with torch.no_grad():
     outputs = net(images)
     _, predicted = torch.max(outputs.data, 1)
     predicted = predicted.cpu().numpy()
-    print(predicted[0])
+    #print(predicted[0])
 
 print('Prediction:',Num2Cata[predicted[0]])
