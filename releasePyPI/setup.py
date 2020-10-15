@@ -6,7 +6,7 @@ setup(
     version = '1.1',
     description="The API for melanoma image skin level prediction.",
     packages= find_packages(),
-    py_modules=['skinAPI'],  # pip安裝完之後,要import時的名稱
-    author="Claire",
+    py_modules=['skinAPI'],
+    author="Claire.Liao",
     license="LGPL"
 )
