@@ -5,6 +5,7 @@ opencv-python
 pandas
 Pillow>=6.2.1
 scikit-learn>=0.21.3
+skin-APIv==1.0
 tqdm>=4.36.1
 scikit-image>=0.16.2
 matplotlib==3.1.0
