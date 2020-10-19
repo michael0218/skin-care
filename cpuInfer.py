@@ -21,7 +21,7 @@ transform_test = transforms.Compose([
         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
     ])
 
-Num2Cata = {0:"nevus",1:"melanoma",2:"seborrheic_keratosis"}
+Num2Cata = {0:"痣",1:"黑色素瘤",2:"老人斑"}
 
 resnet101 = models.resnet101(pretrained=False)
 resnet101.fc = nn.Linear(2048, 3)
